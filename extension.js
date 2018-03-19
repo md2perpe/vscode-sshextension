@@ -15,6 +15,21 @@ var fastOpenConnectionProjectPath = null;
 var servers = [];
 var terminals = [];
 
+function serverNames() {
+    if (!servers.length) {
+        vscode.window.showInformationMessage("You don't have any servers");
+        return;
+    }
+    
+    // Create list of server names
+    var names = [];
+    servers.forEach(function (element) {
+        names.push(element.name);
+    }, this);
+    
+    return names;
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -23,34 +38,16 @@ function activate(context) {
 
     // Command palette 'Open SSH Connection'
     context.subscriptions.push(vscode.commands.registerCommand('sshextension.openConnection', function () {
-        if (!servers.length) {
-            vscode.window.showInformationMessage("You don't have any servers");
-            return;
-        }
-        // Create list of server names
-        var names = [];
-        servers.forEach(function (element) {
-            names.push(element.name);
-        }, this);
         // Show Command Palette with server list of servers
-        vsUtil.pick(names, 'Select the server to connect...').then(function (item) {
+        vsUtil.pick(serverNames(), 'Select the server to connect...').then(function (item) {
             openSSHConnection(item, false);
         })
     }));
 
     // Command palette 'SSH Port Forwarding'
     context.subscriptions.push(vscode.commands.registerCommand('sshextension.portForwarding', function () {
-        if (!servers.length) {
-            vscode.window.showInformationMessage("You don't have any servers");
-            return;
-        }
-        // Create list of server names
-        var names = [];
-        servers.forEach(function (element) {
-            names.push(element.name);
-        }, this);
         // Show Command Palette with server list of servers
-        vsUtil.pick(names, 'Select the server to connect...').then(function (item) {
+        vsUtil.pick(serverNames(), 'Select the server to connect...').then(function (item) {
             createForwarding(item);
         })
     }));
