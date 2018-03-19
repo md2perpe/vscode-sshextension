@@ -22,12 +22,7 @@ function serverNames() {
     }
     
     // Create list of server names
-    var names = [];
-    servers.forEach(function (element) {
-        names.push(element.name);
-    }, this);
-    
-    return names;
+    return servers.map(s => s.name);
 }
 
 // this method is called when your extension is activated
